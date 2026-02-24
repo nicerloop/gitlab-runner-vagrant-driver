@@ -1,2 +1,5 @@
 /gitlab-runner/
 /test-project/
+/driver.env
+/Vagrantfile
+/.vagrant/
