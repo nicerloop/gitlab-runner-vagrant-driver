@@ -102,8 +102,8 @@ SHELL
 
   # setup GitLab Runner prerequisites
   config.vm.provision "shell", inline: <<-SHELL
-    winget install --source winget Git.Git --silent --nowarn
-    winget install --source winget GitLab.Runner --silent --nowarn
+    winget install --source winget Git.Git
+    winget install --source winget GitLab.Runner
     C:/Progra~1/Git/bin/git lfs install
     C:/Progra~1/Git/bin/git config --system --unset credential.helper
     C:/Progra~1/Git/bin/git config --system credential.helper store
