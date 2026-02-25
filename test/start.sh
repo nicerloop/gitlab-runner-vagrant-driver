@@ -53,7 +53,7 @@ gitlab-runner register \
 	--executor "custom" \
 	--custom-config-exec "$(pwd)/../bin/vagrant-driver.sh" \
 	--custom-config-args "config" \
-	--custom-config-args "box=stromweld/windows-11:202511.21.0" \
+	--custom-config-args "box=bento/windows-11" \
 	--custom-config-args "provider=virtualbox" \
 	--custom-config-args "template=$(pwd)/../share/templates/Vagrantfile.vbox.win.erb" \
 	--custom-prepare-exec "$(pwd)/../bin/vagrant-driver.sh" \
