@@ -33,14 +33,14 @@ config() {
 		;;
 	*) echo "unsupported guest os for box $job_box" >&2 && exit 1 ;;
 	esac
-	test -n "$VAGRANT_DRIVER_DEBUG" &&  cat >driver.env <<EOF
+	test -n "$VAGRANT_DRIVER_DEBUG" && cat >driver.env <<EOF
 provider=$provider
 template=$template
 job_box=$job_box
 vagrant_communicator=$vagrant_communicator
 guest_temp=$guest_temp
 EOF
-	cat <<EOF 
+	cat <<EOF
 {
   "driver": {
     "name": "vagrant",
@@ -60,7 +60,7 @@ EOF
 
 prepare() {
 	# shellcheck source=/dev/null
-	test -n "$VAGRANT_DRIVER_DEBUG" &&  . "driver.env"
+	test -n "$VAGRANT_DRIVER_DEBUG" && . "driver.env"
 	box_name=$(echo "$job_box" | cut -d ':' -f 1)
 	if [ "$box_name" != "$job_box" ]; then
 		box_version=$(echo "$job_box" | cut -d ':' -f 2)
@@ -76,18 +76,18 @@ prepare() {
 
 run() {
 	# shellcheck source=/dev/null
-	test -n "$VAGRANT_DRIVER_DEBUG" &&  . "driver.env"
+	test -n "$VAGRANT_DRIVER_DEBUG" && . "driver.env"
 	script="$1" && shift || true
 	script="${script:?missing argument}"
 	script_name=$(basename "$script")
 	description="$1" && shift || true
 	test -n "$description" && echo "$description"
-	vagrant upload "$script" "$guest_temp/$script_name" >/dev/null 2>&1 
+	vagrant upload "$script" "$guest_temp/$script_name" >/dev/null 2>&1
 	vagrant "$vagrant_communicator" --command "$guest_temp/$script_name"
 }
 
 cleanup() {
-	test -f Vagrantfile && ( vagrant destroy --force || vagrant destroy --force )
+	test -f Vagrantfile && (vagrant destroy --force || vagrant destroy --force)
 }
 
 case "$stage" in
