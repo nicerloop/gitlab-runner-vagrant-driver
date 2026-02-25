@@ -66,8 +66,7 @@ prepare() {
 		box_version=$(echo "$job_box" | cut -d ':' -f 2)
 		version_args="--box-version $box_version"
 	fi
-	test -n "$provider" && provider_args="--provider $provider" &&
-		( test "$provider" != virtualbox && vagrant plugin install "vagrant-$provider" || true )
+	test -n "$provider" && provider_args="--provider $provider"
 	test -n "$template" && template_args="--template $template"
 	# shellcheck disable=SC2086
 	vagrant init $version_args $template_args "$box_name" --force
