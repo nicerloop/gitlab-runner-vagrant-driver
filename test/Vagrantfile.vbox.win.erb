@@ -12,10 +12,10 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  # config.vm.box = "<%= box_name %>"
-  # <% if box_version -%>
-  # config.vm.box_version = "<%= box_version %>"
-  # <% end -%>
+  config.vm.box = "<%= box_name %>"
+  <% if box_version -%>
+  config.vm.box_version = "<%= box_version %>"
+  <% end -%>
 
   <% if box_url -%>
   # The url from where the 'config.vm.box' box will be fetched if it
@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
-  # config.vm.box_check_update = false
+  config.vm.box_check_update = false
   <% end -%>
 
   # Create a forwarded port mapping which allows access to a specific port
@@ -76,10 +76,10 @@ Vagrant.configure("2") do |config|
   # View the documentation for the provider you are using for more
   # information on available options.
 
-  config.vm.provider "tart" do |tart|
-    tart.image = "<%= box_name %><% if box_version -%>:<%= box_version %><% end -%>"
-    tart.memory = 8192
-    tart.cpus = 4
+  config.vm.provider "virtualbox" do |v|
+    v.linked_clone = true
+    v.memory = 8192
+    v.cpus = 4
   end
 
   # Enable provisioning with a shell script. Additional provisioners such as
@@ -90,11 +90,28 @@ Vagrant.configure("2") do |config|
   #   apt-get install -y apache2
   # SHELL
 
+  # open interactive session
+  config.vm.provision "shell", inline: <<-SHELL
+    \$regPath = "HKLM:/SOFTWARE/Microsoft/Windows NT/CurrentVersion/WinLogon"
+    Set-ItemProperty -Path \$regPath -Name "AutoAdminLogon" -Value "1" -Type String
+    Set-ItemProperty -Path \$regPath -Name "DefaultUsername" -Value "vagrant" -Type String
+    Set-ItemProperty -Path \$regPath -Name "DefaultPassword" -Value "vagrant" -Type String
+    Set-ItemProperty -Path \$regPath -Name "DefaultDomainName" -Value \$env:COMPUTERNAME -Type String
+    Restart-Computer -Force
+SHELL
+
   # setup GitLab Runner prerequisites
-  config.vm.provision "shell", privileged: false, inline: <<-SHELL
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    brew install git git-lfs gitlab-runner
-    git lfs install
+  config.vm.provision "shell", inline: <<-SHELL
+    winget install --source winget Git.Git
+    winget install --source winget GitLab.Runner
+    C:/Progra~1/Git/bin/git lfs install
+    C:/Progra~1/Git/bin/git config --system --unset credential.helper
+    C:/Progra~1/Git/bin/git config --system credential.helper store
+SHELL
+
+  # configure gitlab.test
+  config.vm.provision "shell", inline: <<-SHELL
+    Add-Content -Path "$env:SystemRoot/System32/drivers/etc/hosts" -Value "`n10.0.2.2 gitlab.test" -Encoding ascii
 SHELL
 
 end

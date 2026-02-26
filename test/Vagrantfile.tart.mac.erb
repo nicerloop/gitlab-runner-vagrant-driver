@@ -97,4 +97,9 @@ Vagrant.configure("2") do |config|
     git lfs install
 SHELL
 
+  # configure gitlab.test
+  config.vm.provision "shell", inline: <<-SHELL
+    echo 10.0.2.2 gitlab.test >> /etc/hosts
+SHELL
+
 end

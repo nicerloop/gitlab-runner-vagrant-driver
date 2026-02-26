@@ -55,7 +55,7 @@ gitlab-runner register \
 	--custom-config-args "config" \
 	--custom-config-args "box=bento/windows-11" \
 	--custom-config-args "provider=virtualbox" \
-	--custom-config-args "template=$(pwd)/../share/templates/Vagrantfile.vbox.win.erb" \
+	--custom-config-args "template=$(pwd)/Vagrantfile.vbox.win.erb" \
 	--custom-prepare-exec "$(pwd)/../bin/vagrant-driver.sh" \
 	--custom-run-exec "$(pwd)/../bin/vagrant-driver.sh" \
 	--custom-cleanup-exec "$(pwd)/../bin/vagrant-driver.sh" \

@@ -109,9 +109,4 @@ SHELL
     C:/Progra~1/Git/bin/git config --system credential.helper store
 SHELL
 
-  # configure gitlab.test
-  config.vm.provision "shell", inline: <<-SHELL
-    Add-Content -Path "$env:SystemRoot/System32/drivers/etc/hosts" -Value "`n10.0.2.2 gitlab.test" -Encoding ascii
-SHELL
-
 end
