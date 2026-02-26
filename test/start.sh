@@ -8,7 +8,10 @@ cd "$(dirname "$0")"
 . ".env"
 
 # dns registration
-grep -q "${GITLAB_HOST}" /etc/hosts || sudo sh -c "echo 127.0.0.1 ${GITLAB_HOST} >> /etc/hosts"
+grep -q "${GITLAB_HOST}" /etc/hosts || (
+	echo "elevate to add ${GITLAB_HOST} to /etc/hosts"
+	sudo sh -c "echo 127.0.0.1 ${GITLAB_HOST} >> /etc/hosts"
+)
 
 # start gitlab
 docker compose up -d

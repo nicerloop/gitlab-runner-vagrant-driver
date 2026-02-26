@@ -4,4 +4,7 @@ killall gitlab-runner
 rm -r -f gitlab-runner
 docker compose down --volumes
 rm -r -f test-project
-grep -q "${GITLAB_HOST}" /etc/hosts && sudo sh -c "sed -i .old -e '/${GITLAB_HOST}/d' /etc/hosts"
+grep -q "${GITLAB_HOST}" /etc/hosts && (
+	echo "elevate to remove ${GITLAB_HOST} from /etc/hosts"
+	sudo sh -c "sed -i .old -e '/${GITLAB_HOST}/d' /etc/hosts"
+)
